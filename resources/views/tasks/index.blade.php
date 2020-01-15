@@ -15,7 +15,7 @@
             <tbody>
                 @foreach($tasks as $task)
                 <tr>
-                    <td>{!! link_to_route('messages.show', &task->id, ['id' => $task->id}) !!}</td>
+                    <td>{!! link_to_route('messages.show', $task->id, ['id' => $task->id]) !!}</td>
                     <td>{{ $task->content }}</td>
                 </tr>
                 @endforeach
@@ -23,6 +23,6 @@
         </table>
     @endif
     
-    {!! link_to_route('messages.create', '新たなタスクの決定', [], ['class' => 'btn btn-primary']) !!}
+    {!! link_to_route('tasks.create', '新たなタスクの決定', [], ['class' => 'btn btn-primary']) !!}
 
 @endsection
