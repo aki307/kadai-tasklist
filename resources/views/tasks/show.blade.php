@@ -17,7 +17,7 @@
     
     {!! link_to_route('messages.edit', 'このメッセージを編集', ['id' =>$message->id], ['class' => 'btn btn-light' ]) !!}
     
-    {!! Form::model($task, ['route' => ['messages.destroy', %task->id],
+    {!! Form::model($task, ['route' => ['tasks.destroy', %task->id],
         {!! Form::submit('削除', ['class'='btn btn-primary']) !!}
     {!! Form::close() !!}
 @endsection
