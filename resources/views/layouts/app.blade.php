@@ -8,6 +8,8 @@
     </head>
 
     <body>
+        
+
         <header class="mb-4">
             <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
                 <a class="navbar-brand" href="/">タスクリスト</a>
@@ -26,6 +28,8 @@
         </header>
         
         <div class="container">
+            @include('commons.error_messages')
+            
             @yield('content')
         </div>
         
