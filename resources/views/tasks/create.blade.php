@@ -11,11 +11,18 @@
             {!! Form::model($task, ['route' =>'tasks.store']) !!}
             
             <div class="form-group">
+                {!! Form::label('status', '進捗:') !!}
+                {!! Form::text('status',null,['class' => 'form-control']) !!}
+            </div>
+            
+            <div class="form-group">
                 {!! Form::label('content', 'タスク:') !!}
                 {!! Form::text('content',null, ['class' => 'form-control']) !!}
                 
-                {!! Form::submit('決定') !!}
             </div>
+            {!! Form::submit('決定', ['class' => 'btn btn-primary']) !!}
+            
+        {!! Form::close() !!}
         </div>
     </div>
 
