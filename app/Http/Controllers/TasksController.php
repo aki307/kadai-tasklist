@@ -14,25 +14,35 @@ class TasksController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {
-        $tasks = Task::all();
-        return view('tasks.index',[
-            'tasks' => $tasks,
-            ]);
+    {   
+        
+        $data = [];
+        if(\Auth::check()){
+            $user = \Auth::user();
+            $tasks = $user->tasks()->orderBy('created_at', 'desc')->get();
+            $data = [
+                'tasks' => $tasks,
+            ];
+        }
+        return view('tasks.index' , $data);
     }
+    
 
     /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
-    {
+    public function create(Request $request)
+    {   
+        
+        
         $task = new Task;
         
         return view('tasks.create',[
             'task' =>$task,
          ]);
+        
     }
 
     /**
@@ -42,17 +52,28 @@ class TasksController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {
+    {   
+        
+        
         $this->validate($request, [
             'status' => 'required|max:10',
             'content' => 'required|max:191',
             ]);
         
+        // // saveメソッドの場合、
+        // $task = new Task;
+        // $task->status = $request->status;
+        // $task->content = $request->content;
+        // $task->save();
         
-        $task = new Task;
-        $task->status = $request->status;
-        $task->content = $request->content;
-        $task->save();
+        //  create登録練習
+         Task::create([
+             'content' => $request->content, 
+             'user_id' => $request->user()->id,
+             'status' => $request->status,
+             ]);
+        
+        
         
         return redirect('/');
     }
@@ -64,12 +85,22 @@ class TasksController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show($id)
-    {
+    {   
+        
+        
         $task = Task::find($id);
         
+        // dump(\Auth::check());
+        // dump($task->user_id);
+        // exit();
+        
+        if(\Auth::id() === $task->user_id){
         return view('tasks.show',[
             'task' => $task,
             ]);
+        }else{
+        return redirect('/');
+        }
     }
 
     /**
@@ -79,12 +110,15 @@ class TasksController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
-    {
-        $task = Task::find($id);
+    {   
         
+        
+        $task = Task::find($id);
+        if(\Auth::id() === $task->user_id){
         return view('tasks.edit', [
             'task' => $task,
             ]);
+        }
     }
 
     /**
@@ -96,6 +130,8 @@ class TasksController extends Controller
      */
     public function update(Request $request, $id)
     {   
+        
+        
         $this->validate($request,[
             'status' => 'required|max:10',
             'content' => 'required|max:191',
@@ -116,10 +152,15 @@ class TasksController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
-    {
-        $task = Task::find($id);
-        $task->delete();
+    {   
         
+        
+        // $task = Task::find($id);
+        $task = \App\Task::find($id);
+        
+        if(\Auth::id() === $task->user_id){
+        $task->delete();
+        }
         return redirect('/');
     }
 }
